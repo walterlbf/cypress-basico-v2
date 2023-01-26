@@ -17,9 +17,29 @@ describe('Central de Atendimento ao Cliente TAT', () => {
         cy.get('input[name="firstName"]').type('Walter')
         cy.get('input[name="lastName"]').type('Luiz')
         cy.get('input[type="email"]').type('walter@teste.com')
-        cy.get('textarea[name="open-text-area"]').type('What is Lorem Ipsum?Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum. Why do we use it?It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using Content here, content here, making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for lorem ipsum will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose Teste de envio de mensagem', {delay: 0}) 
-        //sobrescrever o (delay) para escrever o texto mais rapido.
+        cy.get('textarea[name="open-text-area"]').type('What is Lorem Ipsum?Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s.') 
         cy.get('button[type="submit"]').click()
         cy.get('.success').should('be.visible')
+    })
+    it('exibe mensagem de erro ao submeter o formulário com um email com formatação inválida', () => {
+        cy.get('input[name="firstName"]').type('Walter')
+        cy.get('input[name="lastName"]').type('Luiz')
+        cy.get('input[type="email"]').type('walterteste.com')
+        cy.get('textarea[name="open-text-area"]').type('What is Lorem Ipsum?Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s.', {delay: 0}) 
+        //sobrescrever o **delay** para escrever o texto mais rapido.
+        cy.get('button[type="submit"]').click()
+        cy.get('.error').should('be.visible')
+    })
+    it('Verifica se o campo permance vazio caso seja digitado um valor não numérico.', () => {
+      cy.get('#phone').type('abcdefghi').should('have.value', '')
+    })
+
+    it('Exibe mensagem de erro quando o telefone se torna obrigatório mas não é preenchido antes do envio do formulário', () => {
+      cy.get('input[name="firstName"]').type('Walter')
+        cy.get('input[name="lastName"]').type('Luiz')
+        cy.get('input[type="email"]').type('walter@teste.com')
+        cy.get('#phone-checkbox').click()
+        cy.get('button[type="submit"]').click()
+        cy.get('.error').should('be.visible')
     })
 })
